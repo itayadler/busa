@@ -6,6 +6,8 @@ gem 'rails-api'
 
 gem 'pg'
 
+gem 'gtfs'
+
 group :development do
   gem 'debugger'
   gem 'awesome_print'
