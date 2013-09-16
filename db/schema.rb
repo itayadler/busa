@@ -25,7 +25,8 @@ ActiveRecord::Schema.define(version: 20130916190206) do
     t.string "fare_url"
   end
 
-  create_table "stop_times", force: true do |t|
+  create_table "stop_times", id: false, force: true do |t|
+    t.string "id"
     t.string "arrival_time"
     t.string "departure_time"
     t.string "stop_id"
