@@ -5,8 +5,7 @@ gem 'rails', '4.0.0'
 gem 'rails-api'
 
 gem 'pg'
-
-gem 'gtfs'
+gem 'activerecord-postgis-adapter'
 
 group :development do
   gem 'debugger'
