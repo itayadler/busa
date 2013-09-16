@@ -6,9 +6,14 @@ gem 'rails', '4.0.0'
 gem 'rails-api'
 
 # Use sqlite3 as the database for Active Record
-gem 'sqlite3'
+gem 'pg'
 
-
+group :development do
+  gem 'debugger'
+  gem 'awesome_print'
+  gem 'fancy_irb'
+  gem 'better_errors'
+end
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
