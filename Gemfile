@@ -6,6 +6,7 @@ gem 'rails-api'
 
 gem 'pg'
 gem 'activerecord-postgis-adapter'
+gem 'geokit-rails'
 
 group :development do
   gem 'debugger'
