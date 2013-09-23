@@ -20,10 +20,12 @@ namespace :import do
       Dir.foreach(gtfs_folder_path) do |file|
         klass_name = File.basename(file, '.txt')
         active_model = klass_name.camelcase.singularize.safe_constantize
-        active_model_import_time = Benchmark.realtime do
-          copy_into_table(active_model, "#{gtfs_folder_path}/#{file}") if active_model.present?
+        if active_model.present?
+          active_model_import_time = Benchmark.realtime do
+            copy_into_table(active_model, "#{gtfs_folder_path}/#{file}") if active_model.present?
+          end
+          puts "#{klass_name} import took #{active_model_import_time} seconds"
         end
-        puts "Model import #{klass_name} took #{active_model_import_time} seconds" if active_model.present?
       end
     end
     puts "Entire import took #{entire_time} seconds"
