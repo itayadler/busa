@@ -2,7 +2,6 @@ namespace :import do
   desc 'Import data from GTFS text files'
 
   def copy_into_table(model, path)
-
     ActiveRecord::Base.connection.execute "TRUNCATE TABLE #{model.table_name}"
 
     sql = <<-SQL
@@ -10,13 +9,15 @@ namespace :import do
       FROM '#{path}'
       WITH (FORMAT csv, HEADER TRUE)
     SQL
-    ActiveRecord::Base.connection.execute sql
+    ActiveRecord::Base.connection.execute(sql)
   end
 
   task :gtfs => :environment do
-    copy_into_table Agency, "#{Rails.root}/gtfs/agency.txt"
-    copy_into_table StopTime, "#{Rails.root}/gtfs/stop_times.txt"
-    copy_into_table Stop, "#{Rails.root}/gtfs/stops.txt"
-    copy_into_table Route, "#{Rails.root}/gtfs/routes.txt"
+    gtfs_folder_path = "#{Rails.root}/gtfs"
+    Dir.foreach(gtfs_folder_path) do |file|
+      klass_name = File.basename(file, '.txt')
+      active_model = klass_name.camelcase.singularize.safe_constantize
+      copy_into_table(active_model, "#{gtfs_folder_path}/#{file}") if active_model.present?
+    end
   end
 end

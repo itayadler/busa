@@ -5,7 +5,6 @@ gem 'rails', '4.0.0'
 gem 'rails-api'
 
 gem 'pg'
-gem 'activerecord-postgis-adapter'
 gem 'geokit-rails'
 
 group :development do
