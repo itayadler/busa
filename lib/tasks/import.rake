@@ -17,5 +17,6 @@ namespace :import do
     copy_into_table Agency, "#{Rails.root}/gtfs/agency.txt"
     copy_into_table StopTime, "#{Rails.root}/gtfs/stop_times.txt"
     copy_into_table Stop, "#{Rails.root}/gtfs/stops.txt"
+    copy_into_table Route, "#{Rails.root}/gtfs/routes.txt"
   end
 end
