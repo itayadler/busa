@@ -34,11 +34,14 @@ ActiveRecord::Schema.define(version: 20130923175348) do
     t.string "route_color"
   end
 
-  create_table "shapes", force: true do |t|
+  create_table "shapes", id: false, force: true do |t|
+    t.integer "id"
     t.float   "shape_pt_lat"
     t.float   "shape_pt_lon"
     t.integer "shape_pt_sequence"
   end
+
+  add_index "shapes", ["id", "shape_pt_sequence"], name: "index_shapes_on_id_and_shape_pt_sequence", using: :btree
 
   create_table "stop_times", id: false, force: true do |t|
     t.string "id"
@@ -60,9 +63,10 @@ ActiveRecord::Schema.define(version: 20130923175348) do
     t.string  "parent_station"
   end
 
-  create_table "trips", force: true do |t|
+  create_table "trips", id: false, force: true do |t|
+    t.integer "route_id"
     t.integer "service_id"
-    t.integer "trip_id"
+    t.string  "id"
     t.integer "direction_id"
     t.integer "shape_id"
   end

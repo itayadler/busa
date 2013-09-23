@@ -1,3 +1,5 @@
+require 'benchmark'
+
 namespace :import do
   desc 'Import data from GTFS text files'
 
@@ -14,10 +16,16 @@ namespace :import do
 
   task :gtfs => :environment do
     gtfs_folder_path = "#{Rails.root}/gtfs"
-    Dir.foreach(gtfs_folder_path) do |file|
-      klass_name = File.basename(file, '.txt')
-      active_model = klass_name.camelcase.singularize.safe_constantize
-      copy_into_table(active_model, "#{gtfs_folder_path}/#{file}") if active_model.present?
+    entire_time = Benchmark.realtime do
+      Dir.foreach(gtfs_folder_path) do |file|
+        klass_name = File.basename(file, '.txt')
+        active_model = klass_name.camelcase.singularize.safe_constantize
+        active_model_import_time = Benchmark.realtime do
+          copy_into_table(active_model, "#{gtfs_folder_path}/#{file}") if active_model.present?
+        end
+        puts "Model import #{klass_name} took #{active_model_import_time} seconds" if active_model.present?
+      end
     end
+    puts "Entire import took #{entire_time} seconds"
   end
 end
