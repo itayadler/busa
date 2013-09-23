@@ -2,6 +2,9 @@ namespace :import do
   desc 'Import data from GTFS text files'
 
   def copy_into_table(model, path)
+
+    ActiveRecord::Base.connection.execute "TRUNCATE TABLE #{model.table_name}"
+
     sql = <<-SQL
       COPY #{model.table_name} (#{model.columns.map(&:name).join(', ')})
       FROM '#{path}'
