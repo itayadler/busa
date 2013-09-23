@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130923174518) do
+ActiveRecord::Schema.define(version: 20130923175348) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,12 @@ ActiveRecord::Schema.define(version: 20130923174518) do
     t.string "route_color"
   end
 
+  create_table "shapes", force: true do |t|
+    t.float   "shape_pt_lat"
+    t.float   "shape_pt_lon"
+    t.integer "shape_pt_sequence"
+  end
+
   create_table "stop_times", id: false, force: true do |t|
     t.string "id"
     t.string "arrival_time"
@@ -52,6 +58,13 @@ ActiveRecord::Schema.define(version: 20130923174518) do
     t.float   "lon"
     t.integer "location_type"
     t.string  "parent_station"
+  end
+
+  create_table "trips", force: true do |t|
+    t.integer "service_id"
+    t.integer "trip_id"
+    t.integer "direction_id"
+    t.integer "shape_id"
   end
 
 end
