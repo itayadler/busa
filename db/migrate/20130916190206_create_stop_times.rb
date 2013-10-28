@@ -1,13 +1,13 @@
 class CreateStopTimes < ActiveRecord::Migration
   def change
     create_table :stop_times, id: false do |t|
-      t.string :id, unique: true
+      t.string :trip_id, unique: true
       t.string :arrival_time
       t.string :departure_time
-      t.string :stop_id
-      t.string :stop_sequence
-      t.string :pickup_type
-      t.string :drop_off_type
+      t.integer :stop_id
+      t.integer :stop_sequence
+      t.integer :pickup_type, limit: 1
+      t.integer :drop_off_type, limit: 1
     end
   end
 end

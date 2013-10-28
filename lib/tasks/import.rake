@@ -22,7 +22,7 @@ namespace :import do
         active_model = klass_name.camelcase.singularize.safe_constantize
         if active_model.present?
           active_model_import_time = Benchmark.realtime do
-            copy_into_table(active_model, "#{gtfs_folder_path}/#{file}") if active_model.present?
+            copy_into_table(active_model, "#{gtfs_folder_path}/#{file}")
           end
           puts "#{klass_name} import took #{active_model_import_time} seconds"
         end
