@@ -1,11 +1,11 @@
 class CreateRoutes < ActiveRecord::Migration
   def change
     create_table :routes do |t|
-      t.string :agency_id
+      t.integer :agency_id, limit: 1
       t.string :route_short_name
       t.string :route_long_name
       t.string :route_desc
-      t.string :route_type
+      t.integer :route_type, limit: 1
       t.string :route_color
     end
   end
