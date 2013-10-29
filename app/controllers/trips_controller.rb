@@ -1,9 +1,9 @@
-class RoutesController < ActionController::API
+class TripsController < ActionController::API
   def index
     lat, lon, radius = get_query_route_params(params.slice(:lat, :lon, :radius))
 
     if lat.blank? || lon.blank? #TODO: need to add validation to the lat and lon?
-      render json: { error_message: 'No valid lat or lon was given to the API' }, status: 400
+      render json: { error_message: 'Missing argument: A valid lat or lon must be specified' }, status: 400
     end
 
     shape_ids = Path.close_to(lon, lat, radius).map(&:shape_id)
@@ -14,9 +14,8 @@ class RoutesController < ActionController::API
     shape_id = Trip.arel_table[:shape_id]
     route_id = Route.arel_table[:id]
     now = Time.now
-    routes = Route \
-      .select(route_id).distinct.select([:route_short_name, :route_desc, :route_long_name, :route_type, :agency_id]) \
-      .joins([:trips => [:stop_times, :calendars]]) \
+    trips = Trip \
+      .joins([:stop_times, :calendars]) \
       .where(shape_id.in(shape_ids)) \
       .where(shape_id.not_eq(nil)) \
       .where(weekday.eq(true)) \
@@ -24,7 +23,11 @@ class RoutesController < ActionController::API
       .where(end_date.gt(now)) \
       .where(stop_sequence.eq(1)) \
       .where("gtfs_time_to_datetime(stop_times.arrival_time, 'Asia/Jerusalem') > now() - interval '2 hours' AND gtfs_time_to_datetime(stop_times.arrival_time, 'Asia/Jerusalem') < now()") 
-    render json: routes
+    render json: trips
+  end
+
+  def show
+    render json: Trip.where(id: params[:id]).first, serializer: ShowTripSerializer
   end
 
   private
@@ -36,4 +39,5 @@ class RoutesController < ActionController::API
     [lat, lon, radius]
   end
 end
+
 
