@@ -13,3 +13,6 @@ group :development do
   gem 'fancy_irb'
   gem 'better_errors'
 end
+
+gem 'activerecord-import'
+gem 'activerecord-postgis-adapter'

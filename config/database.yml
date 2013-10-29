@@ -1,8 +1,12 @@
 busa: &busa
-  adapter: postgresql
+  adapter: postgis
+  encoding: unicode
+  postgis_extension: true
+  schema_search_path: public,postgis
   database: busa
   pool: 5
   timeout: 5000
+  host: localhost
 
 development:
   <<: *busa

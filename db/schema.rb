@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131028152658) do
+ActiveRecord::Schema.define(version: 20131029085405) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "postgis"
 
   create_table "agencies", force: true do |t|
     t.string "name"
@@ -38,7 +39,14 @@ ActiveRecord::Schema.define(version: 20131028152658) do
     t.date    "end_date"
   end
 
-  add_index "calendars", ["service_id"], name: "index_calendars_on_service_id", using: :btree
+  add_index "calendars", ["service_id"], :name => "index_calendars_on_service_id"
+
+  create_table "paths", force: true do |t|
+    t.integer "shape_id"
+    t.spatial "path",     limit: {:srid=>4326, :type=>"line_string"}
+  end
+
+  add_index "paths", ["shape_id"], :name => "index_paths_on_shape_id"
 
   create_table "routes", force: true do |t|
     t.integer "agency_id",        limit: 2
@@ -56,7 +64,7 @@ ActiveRecord::Schema.define(version: 20131028152658) do
     t.integer "shape_pt_sequence"
   end
 
-  add_index "shapes", ["id", "shape_pt_sequence"], name: "index_shapes_on_id_and_shape_pt_sequence", using: :btree
+  add_index "shapes", ["id", "shape_pt_sequence"], :name => "index_shapes_on_id_and_shape_pt_sequence"
 
   create_table "stop_times", id: false, force: true do |t|
     t.string  "trip_id"
@@ -68,8 +76,8 @@ ActiveRecord::Schema.define(version: 20131028152658) do
     t.integer "drop_off_type",  limit: 2
   end
 
-  add_index "stop_times", ["stop_id"], name: "index_stop_times_on_stop_id", using: :btree
-  add_index "stop_times", ["trip_id"], name: "index_stop_times_on_trip_id", using: :btree
+  add_index "stop_times", ["stop_id"], :name => "index_stop_times_on_stop_id"
+  add_index "stop_times", ["trip_id"], :name => "index_stop_times_on_trip_id"
 
   create_table "stops", force: true do |t|
     t.integer "code"
@@ -89,8 +97,8 @@ ActiveRecord::Schema.define(version: 20131028152658) do
     t.integer "shape_id"
   end
 
-  add_index "trips", ["id"], name: "index_trips_on_id", using: :btree
-  add_index "trips", ["route_id"], name: "index_trips_on_route_id", using: :btree
-  add_index "trips", ["service_id"], name: "index_trips_on_service_id", using: :btree
+  add_index "trips", ["id"], :name => "index_trips_on_id"
+  add_index "trips", ["route_id"], :name => "index_trips_on_route_id"
+  add_index "trips", ["service_id"], :name => "index_trips_on_service_id"
 
 end
