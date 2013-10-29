@@ -1,11 +1,11 @@
 class ShowTripSerializer < ActiveModel::Serializer
-  attributes :id
+  attributes :id, :direction_id
   has_one :route
   has_one :path
   has_many :stops
 
   def stops
-    object.stops.sort { |a,b| a.stop_time.stop_sequence <=> b.stop_time.stop_sequence }
+    object.stop_times.sort { |a,b| a.stop_sequence <=> b.stop_sequence }.map(&:stop)
   end
 end
 

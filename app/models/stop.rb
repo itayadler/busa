@@ -3,5 +3,5 @@ class Stop < ActiveRecord::Base
                    :default_formula => :sphere,
                    :lat_column_name => :lat,
                    :lng_column_name => :lon
-  has_one :stop_time
+  has_many :stop_times
 end
