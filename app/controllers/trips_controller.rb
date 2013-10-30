@@ -23,11 +23,11 @@ class TripsController < ActionController::API
       .where(end_date.gt(now)) \
       .where(stop_sequence.eq(1)) \
       .where("gtfs_time_to_datetime(stop_times.arrival_time, 'Asia/Jerusalem') > now() - interval '2 hours' AND gtfs_time_to_datetime(stop_times.arrival_time, 'Asia/Jerusalem') < now()") 
-    render json: trips
+    render json: trips, root: false
   end
 
   def show
-    render json: Trip.includes(:stop_times => :stop).where(id: params[:id]).first, serializer: ShowTripSerializer
+    render json: Trip.includes(:stop_times => :stop).where(id: params[:id]).first, serializer: ShowTripSerializer, root: false
   end
 
   private
