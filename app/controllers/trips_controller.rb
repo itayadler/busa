@@ -6,7 +6,7 @@ class TripsController < ActionController::API
       render json: { error_message: 'Missing argument: A valid lat or lon must be specified' }, status: 400
     end
 
-    shape_ids = Path.close_to(lon, lat, radius).map(&:shape_id)
+    shape_ids = Path.close_to(lon, lat, radius).map(&:shape_id).uniq
     start_date = Calendar.arel_table[:start_date]
     end_date = Calendar.arel_table[:end_date]
     stop_sequence = StopTime.arel_table[:stop_sequence]
@@ -23,7 +23,7 @@ class TripsController < ActionController::API
       .where(end_date.gt(now)) \
       .where(stop_sequence.eq(1)) \
       .where("gtfs_time_to_datetime(stop_times.arrival_time, 'Asia/Jerusalem') > now() - interval '2 hours' AND gtfs_time_to_datetime(stop_times.arrival_time, 'Asia/Jerusalem') < now()") 
-    render json: trips, root: false
+    render json: trips.all.uniq(&:shape_id), root: false
   end
 
   def show
