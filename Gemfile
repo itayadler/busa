@@ -17,4 +17,4 @@ end
 gem 'activerecord-import'
 gem 'activerecord-postgis-adapter'
 gem "active_model_serializers"
-gem 'capistrano'
+gem 'capistrano', '2.15.4'
