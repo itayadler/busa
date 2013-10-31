@@ -14,5 +14,8 @@ development:
 test:
   <<: *busa
 
-production:
+production:  
   <<: *busa
+  database: busa_production
+  username: busa
+  password: r3mind3r
