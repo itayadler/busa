@@ -1,3 +1,4 @@
 Busa::Application.routes.draw do
-  resources :trips, only: [:index, :show]
+  get 'trips/:action', to: 'trips#show'
+  resources :trips, only: [:index]
 end
