@@ -9,7 +9,7 @@ class ShowTripSerializer < ActiveModel::Serializer
       shape_path
     else
       factory = RGeo::Cartesian.factory(srid: 4326)
-      factory.line_string(object.stop_path.points)
+      { path: factory.line_string(object.stop_path.points) }
     end
   end
 
