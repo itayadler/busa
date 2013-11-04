@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131029112645) do
+ActiveRecord::Schema.define(version: 20131104153653) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,13 +41,6 @@ ActiveRecord::Schema.define(version: 20131029112645) do
 
   add_index "calendars", ["service_id"], :name => "index_calendars_on_service_id"
 
-  create_table "paths", force: true do |t|
-    t.integer "shape_id"
-    t.spatial "path",     limit: {:srid=>4326, :type=>"line_string", :geographic=>true}
-  end
-
-  add_index "paths", ["shape_id"], :name => "index_paths_on_shape_id"
-
   create_table "routes", force: true do |t|
     t.integer "agency_id",        limit: 2
     t.string  "route_short_name"
@@ -57,6 +50,14 @@ ActiveRecord::Schema.define(version: 20131029112645) do
     t.string  "route_color"
   end
 
+  create_table "shape_paths", force: true do |t|
+    t.integer "shape_id"
+    t.spatial "path",     limit: {:srid=>4326, :type=>"line_string", :geographic=>true}
+  end
+
+  add_index "shape_paths", ["path"], :name => "paths_geo_index", :spatial => true
+  add_index "shape_paths", ["shape_id"], :name => "index_shape_paths_on_shape_id"
+
   create_table "shapes", id: false, force: true do |t|
     t.integer "id"
     t.float   "shape_pt_lat"
@@ -65,6 +66,13 @@ ActiveRecord::Schema.define(version: 20131029112645) do
   end
 
   add_index "shapes", ["id", "shape_pt_sequence"], :name => "index_shapes_on_id_and_shape_pt_sequence"
+
+  create_table "stop_paths", force: true do |t|
+    t.string  "trip_id"
+    t.spatial "points",  limit: {:srid=>4326, :type=>"multi_point", :geographic=>true}
+  end
+
+  add_index "stop_paths", ["points"], :name => "index_stop_paths_on_points", :spatial => true
 
   create_table "stop_times", id: false, force: true do |t|
     t.string  "trip_id"
@@ -100,5 +108,6 @@ ActiveRecord::Schema.define(version: 20131029112645) do
   add_index "trips", ["id"], :name => "index_trips_on_id"
   add_index "trips", ["route_id"], :name => "index_trips_on_route_id"
   add_index "trips", ["service_id"], :name => "index_trips_on_service_id"
+  add_index "trips", ["shape_id"], :name => "index_trips_on_shape_id"
 
 end

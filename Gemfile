@@ -12,6 +12,7 @@ group :development do
   gem 'awesome_print'
   gem 'fancy_irb'
   gem 'better_errors'
+  gem 'powder'
 end
 
 gem 'activerecord-import'

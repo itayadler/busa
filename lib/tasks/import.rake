@@ -34,14 +34,34 @@ namespace :import do
 
   desc "Converting the shapes into paths"
   task :shape_path => :environment do
-    ActiveRecord::Base.connection.execute "TRUNCATE TABLE #{Path.table_name}"
+    ActiveRecord::Base.connection.execute "TRUNCATE TABLE #{ShapePath.table_name}"
     time = Benchmark.realtime do
       sql = %{
-        INSERT INTO #{Path.table_name} (shape_id, path) 
+        INSERT INTO #{ShapePath.table_name} (shape_id, path) 
           (
             SELECT id, postgis.ST_GeomFromText('LINESTRING(' || string_agg(shape_pt_lon || ' ' || shape_pt_lat, ',' order by shape_pt_sequence) || ')', 4326) 
             FROM shapes 
             GROUP BY id
+          )
+      }
+      ActiveRecord::Base.connection.execute(sql)
+    end
+    puts "This awesome import took #{time} seconds"
+  end
+
+  desc "Creating for the trips that miss a shape_id a StopPath"
+  task :stop_path => :environment do
+    ActiveRecord::Base.connection.execute "TRUNCATE TABLE #{StopPath.table_name}"
+    time = Benchmark.realtime do
+      sql = %{
+        INSERT INTO #{StopPath.table_name} (trip_id, points) 
+          (
+            SELECT trips.id, postgis.ST_GeomFromText('MULTIPOINT(' || string_agg(lon || ' ' || lat, ',' order by stop_sequence) || ')', 4326) 
+            FROM trips
+            INNER JOIN stop_times ON stop_times.trip_id = trips.id 
+            INNER JOIN stops ON stops.id = stop_times.stop_id 
+            WHERE trips.shape_id is NULL
+            GROUP BY trips.id
           )
       }
       ActiveRecord::Base.connection.execute(sql)

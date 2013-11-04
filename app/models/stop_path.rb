@@ -1,12 +1,13 @@
-class Path < ActiveRecord::Base
-  belongs_to :shape
-  scope :close_to, ->(latitude,longitude,distance_in_meters = 1000) {
+class StopPath < ActiveRecord::Base
+  belongs_to :trip
+  scope :close_to, ->(longitude,latitude,distance_in_meters = 1000) {
     where(%{
       ST_DWithin(
+        stop_paths.points,
         ST_GeographyFromText('SRID=4326;POINT(%f %f)'),
-        paths.path,
         %d
       )
     } % [longitude, latitude, distance_in_meters])
   }
 end
+
