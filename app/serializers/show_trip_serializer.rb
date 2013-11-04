@@ -1,8 +1,17 @@
 class ShowTripSerializer < ActiveModel::Serializer
-  attributes :id, :direction_id, :stops, :shape_id, :origin, :destination
+  attributes :id, :direction_id, :stops, :shape_id, :origin, :destination, :path
   has_one :route
-  has_one :path
   attr_accessor :_stops
+
+  def path
+    shape_path = object.shape_path
+    if shape_path.present?
+      shape_path
+    else
+      factory = RGeo::Cartesian.factory(srid: 4326)
+      factory.line_string(object.stop_path.points)
+    end
+  end
 
   def stops
     object.stop_times.sort { |a,b| a.stop_sequence <=> b.stop_sequence }.map do |stop_time|

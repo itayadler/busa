@@ -5,5 +5,6 @@ class Trip < ActiveRecord::Base
   has_many :stops, :through => :stop_times
   belongs_to :shape
   belongs_to :route
-  has_one :path, :through => :shape
+  has_one :shape_path, :through => :shape
+  has_one :stop_path
 end
