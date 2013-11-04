@@ -22,7 +22,7 @@ class TripsController < ActionController::API
     now = Time.now
     trips = Trip \
       .joins([:stop_times, :calendars]) \
-      .includes(:stop_times) \
+      .includes([:stop_times, :route]) \
       .where(shape_id.in(shape_ids).or(trip_id.in(trip_stop_ids))) \
       .where(weekday.eq(true)) \
       .where(start_date.lt(now)) \
@@ -31,7 +31,7 @@ class TripsController < ActionController::API
       .where("gtfs_time_to_datetime(stop_times.arrival_time, 'Asia/Jerusalem') > now() - interval '2 hours' AND gtfs_time_to_datetime(stop_times.arrival_time, 'Asia/Jerusalem') < now()") 
     result = trips.to_a
     result_by_shape_ids = result.reject { |t| t.shape_id == nil }.uniq(&:shape_id)
-    result_by_trip_id = result.select { |t| t.shape_id == nil }.uniq(&:id)
+    result_by_trip_id = result.select { |t| t.shape_id == nil }.uniq { |t| t.route.route_desc }
     result = result_by_shape_ids + result_by_trip_id
     render json: result, root: false
   end
