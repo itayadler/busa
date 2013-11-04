@@ -39,7 +39,7 @@ namespace :import do
       sql = %{
         INSERT INTO #{ShapePath.table_name} (shape_id, path) 
           (
-            SELECT id, postgis.ST_GeomFromText('LINESTRING(' || string_agg(shape_pt_lon || ' ' || shape_pt_lat, ',' order by shape_pt_sequence) || ')', 4326) 
+            SELECT id, ST_GeomFromText('LINESTRING(' || string_agg(shape_pt_lon || ' ' || shape_pt_lat, ',' order by shape_pt_sequence) || ')', 4326) 
             FROM shapes 
             GROUP BY id
           )
@@ -56,7 +56,7 @@ namespace :import do
       sql = %{
         INSERT INTO #{StopPath.table_name} (trip_id, points) 
           (
-            SELECT trips.id, postgis.ST_GeomFromText('MULTIPOINT(' || string_agg(lon || ' ' || lat, ',' order by stop_sequence) || ')', 4326) 
+            SELECT trips.id, ST_GeomFromText('MULTIPOINT(' || string_agg(lon || ' ' || lat, ',' order by stop_sequence) || ')', 4326) 
             FROM trips
             INNER JOIN stop_times ON stop_times.trip_id = trips.id 
             INNER JOIN stops ON stops.id = stop_times.stop_id 
