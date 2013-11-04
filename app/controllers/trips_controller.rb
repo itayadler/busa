@@ -23,7 +23,7 @@ class TripsController < ActionController::API
       .where(end_date.gt(now)) \
       .where(stop_sequence.eq(1)) \
       .where("gtfs_time_to_datetime(stop_times.arrival_time, 'Asia/Jerusalem') > now() - interval '2 hours' AND gtfs_time_to_datetime(stop_times.arrival_time, 'Asia/Jerusalem') < now()") 
-    render json: trips.all.uniq(&:shape_id).sort { |a,b| a.route.route_short_name.to_i <=> b.route.route_short_name.to_i }, root: false
+    render json: trips.all.uniq(&:shape_id), root: false
   end
 
   def show
