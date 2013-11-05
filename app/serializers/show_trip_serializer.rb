@@ -1,5 +1,5 @@
 class ShowTripSerializer < ActiveModel::Serializer
-  attributes :id, :direction_id, :stops, :shape_id, :origin, :destination, :path
+  attributes :id, :origin, :destination, :direction_id, :stops, :shape_id, :path
   has_one :route
   attr_accessor :_stops
 
@@ -14,10 +14,12 @@ class ShowTripSerializer < ActiveModel::Serializer
   end
 
   def stops
-    object.stop_times.sort { |a,b| a.stop_sequence <=> b.stop_sequence }.map do |stop_time|
-      json = stop_time.as_json.merge(stop_time.stop.as_json).except("trip_id", "departure_time")
-      json["arrival_time"] = gtfs_time(json["arrival_time"])
-      json
+    self._stops ||= begin 
+      object.stop_times.sort { |a,b| a.stop_sequence <=> b.stop_sequence }.map do |stop_time|
+        json = stop_time.as_json.merge(stop_time.stop.as_json).except("trip_id", "departure_time")
+        json["arrival_time"] = gtfs_time(json["arrival_time"])
+        json
+      end
     end
   end
 
@@ -32,15 +34,11 @@ class ShowTripSerializer < ActiveModel::Serializer
   end
 
   def origin
-    self.stops.first.name
+    self.stops.first["name"]
   end
 
   def destination
-    self.stops.last.name
-  end
-
-  def stops
-    self._stops ||= object.stop_times.sort { |a,b| a.stop_sequence <=> b.stop_sequence }.map(&:stop)
+    self.stops.last["name"]
   end
 
 end
