@@ -59,6 +59,8 @@ GEM
     fancy_irb (0.7.3)
       paint (>= 0.8.1)
       unicode-display_width (>= 0.1.1)
+    faraday (0.8.8)
+      multipart-post (~> 1.2.0)
     geokit (1.6.5)
       multi_json
     geokit-rails (2.0.0)
@@ -79,6 +81,7 @@ GEM
     mime-types (1.25)
     minitest (4.7.5)
     multi_json (1.8.0)
+    multipart-post (1.2.0)
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
     net-sftp (2.1.2)
@@ -167,6 +170,7 @@ DEPENDENCIES
   capistrano (= 2.15.4)
   debugger
   fancy_irb
+  faraday
   geokit-rails
   pg
   powder

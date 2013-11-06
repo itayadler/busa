@@ -21,3 +21,4 @@ gem "active_model_serializers"
 gem 'capistrano', '2.15.4'
 gem 'unicorn'
 gem 'savon', '~> 2.3.0'
+gem 'faraday'
