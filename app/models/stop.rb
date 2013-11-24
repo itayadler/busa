@@ -4,4 +4,5 @@ class Stop < ActiveRecord::Base
                    :lat_column_name => :lat,
                    :lng_column_name => :lon
   has_many :stop_times
+  has_one :stop_city
 end

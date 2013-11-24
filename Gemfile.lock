@@ -55,12 +55,15 @@ GEM
       debugger-ruby_core_source (~> 1.2.3)
     debugger-linecache (1.2.0)
     debugger-ruby_core_source (1.2.3)
+    easy_translate (0.3.3)
+      json
     erubis (2.7.0)
     fancy_irb (0.7.3)
       paint (>= 0.8.1)
       unicode-display_width (>= 0.1.1)
     faraday (0.8.8)
       multipart-post (~> 1.2.0)
+    geocoder (1.1.8)
     geokit (1.6.5)
       multi_json
     geokit-rails (2.0.0)
@@ -74,6 +77,7 @@ GEM
       rack
       rubyntlm (~> 0.3.2)
     i18n (0.6.5)
+    json (1.8.1)
     kgio (2.8.1)
     mail (2.5.4)
       mime-types (~> 1.16)
@@ -169,8 +173,10 @@ DEPENDENCIES
   better_errors
   capistrano (= 2.15.4)
   debugger
+  easy_translate
   fancy_irb
   faraday
+  geocoder
   geokit-rails
   pg
   powder

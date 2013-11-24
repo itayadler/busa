@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131104153653) do
+ActiveRecord::Schema.define(version: 20131124111324) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,6 +66,15 @@ ActiveRecord::Schema.define(version: 20131104153653) do
   end
 
   add_index "shapes", ["id", "shape_pt_sequence"], :name => "index_shapes_on_id_and_shape_pt_sequence"
+
+  create_table "stop_cities", force: true do |t|
+    t.integer "stop_id"
+    t.string  "city"
+    t.string  "address"
+    t.string  "city_hebrew"
+  end
+
+  add_index "stop_cities", ["stop_id"], :name => "index_stop_cities_on_stop_id"
 
   create_table "stop_paths", force: true do |t|
     t.string  "trip_id"
