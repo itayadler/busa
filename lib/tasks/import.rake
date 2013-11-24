@@ -68,4 +68,14 @@ namespace :import do
     end
     puts "This awesome import took #{time} seconds"
   end
+
+  desc "Filling the stop_cities table with data"
+  task :stop_cities => :environment do
+    ActiveRecord::Base.connection.execute "TRUNCATE TABLE #{StopCity.table_name}"
+    sql = <<-SQL
+      COPY #{StopCity.table_name} 
+      FROM '#{Rails.root}/payload/stop_cities.csv'
+    SQL
+    ActiveRecord::Base.connection.execute(sql)
+  end
 end
