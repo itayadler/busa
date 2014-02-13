@@ -1,12 +1,14 @@
 busa: &busa
   adapter: postgis
-  encoding: unicode
   postgis_extension: true
   schema_search_path: public,postgis
   database: busa
+  user: postgres
+  password: password
   pool: 5
   timeout: 5000
   host: localhost
+  template: template0
 
 development:
   <<: *busa

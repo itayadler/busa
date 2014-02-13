@@ -1,9 +1,47 @@
 require 'benchmark'
+require 'net/ftp'
+require 'fileutils'
 require 'rgeo'
 
 namespace :import do
-  desc 'Import data from GTFS text files'
+  ISRAEL_BUS_GTFS_HOST = 'gtfs.mot.gov.il'
+  ISRAEL_BUS_GTFS_PATH = '/israel-public-transportation.zip'
 
+  def download_file_from_ftp(host, path, save_path)
+    ftp = Net::FTP.new(host)
+    ftp.login
+    ftp.getbinaryfile(path, save_path)
+  end
+
+  desc 'import new gtfs'
+  task :all => [:environment, :download_gtfs, :gtfs, :shape_path, :stop_cities, :stop_path] do
+    emails = ["itayadler@gmail.com", "giladgo@gmail.com"]
+    emails.each do |email_addr|
+      ActionMailer::Base.mail(:from => "no-reply@busa.kata-log.com", :to => email_addr, :subject => "Busa - GTFS daily import", :body => "The import has finished successfully").deliver
+    end
+  end
+
+  desc 'Download GTFS from mot FTP'
+  task :download_gtfs => [:environment] do
+    gtfs_download_path = "#{Rails.root}/gtfs.zip"
+    gtfs_path = "#{Rails.root}/gtfs"
+
+    puts 'Removing GTFS zip'
+    FileUtils.remove_file(gtfs_download_path)
+    puts 'Downloading GTFS'
+    download_file_from_ftp(ISRAEL_BUS_GTFS_HOST, ISRAEL_BUS_GTFS_PATH, gtfs_download_path)
+    puts 'Finished downloading GTFS'
+
+    puts 'Deleting GTFS path'
+    FileUtils.rm_rf(gtfs_path)
+    puts 'Creating GTFS path'
+    FileUtils.mkdir(gtfs_path)
+    puts 'Unzipping gtfs.zip into gtfs path'
+    %x(unzip #{gtfs_download_path} -d gtfs)
+    puts 'Done!'
+  end
+
+  desc 'Import data from GTFS text files'
   def copy_into_table(model, path)
     ActiveRecord::Base.connection.execute "TRUNCATE TABLE #{model.table_name}"
 

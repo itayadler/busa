@@ -1,8 +1,12 @@
-busa
-====
-
-An awesome Bus app
-
-#True story
-select distinct route_id from trips inner join calendars on trips.service_id = calendars.service_id inner join stop_times on stop_times.trip_id = trips.id WHERE shape_id in (39875, 39874) AND trips.shape_id is not null AND monday=true and start_date < NOW() and end_date > NOW() and stop_sequence='1' and gtfs_time_to_datetime(arrival_time, 'Asia/Jerusalem') > now() - interval '2 hours' and gtfs_time_to_datetime(arrival_time, 'Asia/Jerusalem') < now();
-INSERT INTO paths (shape_id, path) (select id, postgis.ST_GeomFromText('LINESTRING(' || string_agg(shape_pt_lon || ' ' || shape_pt_lat, ',' order by shape_pt_sequence) || ')', 4326) from shapes group by id);
+Ruby/NodeJS + PostgreSQL + PostGIS dev box
+===
+This is a Ubuntu precise64 based box(i.e Ubuntu 12.04)
+This box includes the following:
+- Ruby 2.0.0
+- node v0.10.22
+- node-inspector
+- bower v1.2.7
+- npm v1.3.14
+- ZSH+Oh-My-ZSH with the git plugin installed
+- PostgresSQL v9.3.1
+- PostGIS 2.1.1
