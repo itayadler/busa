@@ -11,6 +11,8 @@ set :use_sudo, false
 set :scm, "git"
 set :repository, "git@github.com:itayadler/#{application}.git"
 set :branch, "master"
+set :whenever_command, "bundle exec whenever"
+require 'whenever/capistrano'
 
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
