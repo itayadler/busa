@@ -27,7 +27,7 @@ namespace :import do
     gtfs_path = "#{Rails.root}/gtfs"
 
     puts 'Removing GTFS zip'
-    FileUtils.remove_file(gtfs_download_path)
+    FileUtils.remove_file(gtfs_download_path) if File.exists?(gtfs_download_path)
     puts 'Downloading GTFS'
     download_file_from_ftp(ISRAEL_BUS_GTFS_HOST, ISRAEL_BUS_GTFS_PATH, gtfs_download_path)
     puts 'Finished downloading GTFS'
