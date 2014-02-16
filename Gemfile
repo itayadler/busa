@@ -8,7 +8,7 @@ gem 'pg'
 gem 'geokit-rails'
 
 group :development do
-  gem 'debugger'
+  #gem 'debugger'
   gem 'awesome_print'
   gem 'fancy_irb'
   gem 'better_errors'

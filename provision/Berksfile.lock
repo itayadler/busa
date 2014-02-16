@@ -4,7 +4,7 @@
       "locked_version": "3.1.0"
     },
     "apt": {
-      "locked_version": "1.7.0"
+      "locked_version": "2.3.8"
     },
     "build-essential": {
       "locked_version": "1.4.2"

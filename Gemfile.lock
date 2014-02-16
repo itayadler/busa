@@ -46,13 +46,6 @@ GEM
       net-ssh-gateway (>= 1.1.0)
     chronic (0.10.2)
     coderay (1.1.0)
-    columnize (0.3.6)
-    debugger (1.6.1)
-      columnize (>= 0.3.1)
-      debugger-linecache (~> 1.2.0)
-      debugger-ruby_core_source (~> 1.2.3)
-    debugger-linecache (1.2.0)
-    debugger-ruby_core_source (1.2.3)
     easy_translate (0.3.3)
       json
     erubis (2.7.0)
@@ -154,7 +147,6 @@ DEPENDENCIES
   awesome_print
   better_errors
   capistrano (= 2.15.4)
-  debugger
   easy_translate
   fancy_irb
   faraday
