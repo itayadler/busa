@@ -8,7 +8,7 @@ busa: &busa
   pool: 5
   timeout: 5000
   host: localhost
-  template: template0
+  template: template1
 
 development:
   <<: *busa

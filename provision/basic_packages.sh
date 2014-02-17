@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-#grub-pc workaround for precise64 git installation
+#This ensures that apt will use the mirror that is most closed to you. (Geo mirror ftw)
 sed -i '1i deb mirror://mirrors.ubuntu.com/mirrors.txt precise main restricted universe multiverse\ndeb mirror://mirrors.ubuntu.com/mirrors.txt precise-updates main restricted universe multiverse\ndeb mirror://mirrors.ubuntu.com/mirrors.txt precise-backports main restricted universe multiverse\ndeb mirror://mirrors.ubuntu.com/mirrors.txt precise-security main restricted universe multiverse' /etc/apt/sources.list
+#grub-pc workaround for precise64 git installation
 apt-get -y remove grub-pc
 apt-get -y install grub-pc
 grub-install /dev/sda # precaution

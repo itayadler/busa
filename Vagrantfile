@@ -22,11 +22,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :shell, path: 'provision/lang.sh' #hack to fix postgres lang
   config.vm.provision :shell, path: 'provision/ruby2.sh'
   config.vm.provision :shell, path: 'provision/shared/zsh.sh', privileged: false
-  config.vm.provision :shell, path: 'provision/shared/nodejs.sh', privileged: false
   config.vm.provision :shell, inline: 'mkdir -p /var/chef/cache' #hack to fix postgres chef recipe bug
   config.vm.provision :shell, inline: "echo -e '#{File.read("#{Dir.home}/.gitconfig")}' > '/home/vagrant/.gitconfig'"
 
   config.vm.provision :chef_solo do |chef|
+    ENV['LANGUAGE'] = ENV['LANG'] = ENV['LC_ALL'] = "en_US.UTF-8"
     chef.add_recipe 'postgresql::apt_pgdg_postgresql'
     chef.add_recipe 'postgresql::server'
 
@@ -59,9 +59,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     }
   end
 
-  config.vm.provision :shell, path: 'provision/shared/bower.sh'
   config.vm.provision :shell, path: 'provision/shared/bundle.sh'
   config.vm.provision :shell, inline: "echo -e '#{File.read("#{Dir.home}/.gitconfig")}' > '/home/vagrant/.gitconfig'"
   config.vm.provision :shell, path: 'provision/postgis.sh', privileged: false
-
+  config.vm.provision :shell, path: 'provision/postgres_encoding_fix.sh', privileged: false
+  config.vm.provision :shell, path: 'provision/rails.sh', privileged: false
 end
