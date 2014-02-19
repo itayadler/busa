@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131124111324) do
+ActiveRecord::Schema.define(version: 20140219115737) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,21 @@ ActiveRecord::Schema.define(version: 20131124111324) do
 
   add_index "calendars", ["service_id"], :name => "index_calendars_on_service_id"
 
+  create_table "cities", force: true do |t|
+    t.string  "name"
+    t.spatial "location", limit: {:srid=>0, :type=>"geometry"}
+  end
+
+  add_index "cities", ["location"], :name => "index_cities_on_location", :spatial => true
+
+  create_table "paths", force: true do |t|
+    t.integer "shape_id"
+    t.spatial "path",     limit: {:srid=>4326, :type=>"line_string", :geographic=>true}
+  end
+
+  add_index "paths", ["path"], :name => "index_paths_on_path", :spatial => true
+  add_index "paths", ["shape_id"], :name => "index_paths_on_shape_id"
+
   create_table "routes", force: true do |t|
     t.integer "agency_id",        limit: 2
     t.string  "route_short_name"
@@ -55,7 +70,7 @@ ActiveRecord::Schema.define(version: 20131124111324) do
     t.spatial "path",     limit: {:srid=>4326, :type=>"line_string", :geographic=>true}
   end
 
-  add_index "shape_paths", ["path"], :name => "paths_geo_index", :spatial => true
+  add_index "shape_paths", ["path"], :name => "index_shape_paths_on_path", :spatial => true
   add_index "shape_paths", ["shape_id"], :name => "index_shape_paths_on_shape_id"
 
   create_table "shapes", id: false, force: true do |t|
@@ -71,7 +86,6 @@ ActiveRecord::Schema.define(version: 20131124111324) do
     t.integer "stop_id"
     t.string  "city"
     t.string  "address"
-    t.string  "city_hebrew"
   end
 
   add_index "stop_cities", ["stop_id"], :name => "index_stop_cities_on_stop_id"

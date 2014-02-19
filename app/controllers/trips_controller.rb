@@ -37,7 +37,7 @@ class TripsController < ActionController::API
   end
 
   def show
-    render json: Trip.includes(:stop_times).where(id: params[:trip_id]).first, serializer: ShowTripSerializer, root: false
+    render json: Trip.includes([:stop_times]).where(id: params[:trip_id]).first, serializer: ShowTripSerializer, root: false
   end
 
   private
