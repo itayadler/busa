@@ -91,8 +91,8 @@ namespace :import do
   task :stop_path => :environment do
     ActiveRecord::Base.connection.execute "TRUNCATE TABLE #{StopPath.table_name}"
     time = Benchmark.realtime do
-      sql = %{
-        INSERT INTO #{StopPath.table_name} (trip_id, points) 
+      sql = <<-SQL
+        INSERT INTO #{StopPath.table_name} (trip_id, points)
           (
             SELECT trips.id, ST_GeomFromText('MULTIPOINT(' || string_agg(lon || ' ' || lat, ',' order by stop_sequence) || ')', 4326) 
             FROM trips
@@ -101,7 +101,7 @@ namespace :import do
             WHERE trips.shape_id is NULL
             GROUP BY trips.id
           )
-      }
+      SQL
       ActiveRecord::Base.connection.execute(sql)
     end
     puts "This awesome import took #{time} seconds"
@@ -109,11 +109,27 @@ namespace :import do
 
   desc "Filling the stop_cities table with data"
   task :stop_cities => :environment do
-    ActiveRecord::Base.connection.execute "TRUNCATE TABLE #{StopCity.table_name}"
+
+    # import cities and their polygons
+    City.destroy_all
+    CSV.foreach("#{Rails.root}/payload/israel_muni.csv", col_sep: ';', quote_char: '"', headers: true) do |row|
+      if row['name'].present?
+        c = City.new
+        c.name = row['name']
+        c.location = row['WKT']
+        c.save!
+      end
+    end
+
+    # set city name for each stop in the stop_cities table
     sql = <<-SQL
-      COPY #{StopCity.table_name} 
-      FROM '#{Rails.root}/payload/stop_cities.csv'
+      insert into #{StopCity.table_name} (stop_id, city)
+      select s.id, c.name
+      from stops s inner join cities c
+      on ST_Within(ST_MakePoint(s.lon, s.lat), c.location);
     SQL
     ActiveRecord::Base.connection.execute(sql)
+
   end
+
 end

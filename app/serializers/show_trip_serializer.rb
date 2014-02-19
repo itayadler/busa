@@ -18,7 +18,7 @@ class ShowTripSerializer < ActiveModel::Serializer
       object.stop_times.sort { |a,b| a.stop_sequence <=> b.stop_sequence }.map do |stop_time|
         json = stop_time.as_json.merge(stop_time.stop.as_json).except("trip_id", "departure_time")
         json["arrival_time"] = gtfs_time(json["arrival_time"])
-        json["city"] = stop_time.stop.stop_city.city_hebrew
+        json["city"] = stop_time.stop.stop_city.city
         json
       end
     end

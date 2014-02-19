@@ -13,6 +13,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.forward_agent = true
 
 
+  config.vm.provider "virtualbox" do |v|
+    v.gui = true
+    v.memory = 1024
+  end
+
   config.berkshelf.enabled = true
   config.berkshelf.berksfile_path = 'provision/Berksfile'
 
@@ -49,6 +54,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             :pg_hba => [
                 {type: 'local', db: 'all', user: 'all', addr: nil, method: 'trust'},
                 {type: 'host', db: 'all', user: 'all', addr: '127.0.0.1/32', method: 'trust'},
+                {type: 'host', db: 'all', user: 'all', addr: '33.33.33.0/24', method: 'trust'},
                 {type: 'host', db: 'all', user: 'all', addr: '::1/128', method: 'trust'}
             ],
             password: {
